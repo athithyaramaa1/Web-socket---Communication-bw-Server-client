@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <h1>WebSocket Communication Example</h1>
+    <div>
+        <input type="text" id="messageInput" placeholder="Enter message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div>
+        <h2>Messages:</h2>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        // Establish WebSocket connection
+        const socket = new WebSocket('ws://localhost:8080');
+
+        // Listen for connection open
+        socket.addEventListener('open', function (event) {
+            console.log('WebSocket is open now.');
+            appendMessage('Connected to the server.');
+        });
+
+        // Listen for messages
+        socket.addEventListener('message', function (event) {
+            appendMessage('Server: ' + event.data);
+        });
+
+        // Send a message to the server
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            socket.send(message);
+            appendMessage('Client: ' + message);
+            messageInput.value = '';
+        }
+
+        // Append message to the messages div
+        function appendMessage(message) {
+            const messagesDiv = document.getElementById('messages');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = message;
+            messagesDiv.appendChild(newMessage);
+        }
+    </script>
+</body>
+</html>
